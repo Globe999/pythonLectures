@@ -56,7 +56,8 @@ class GraphicPlayer:
     # TODO: We need a constructor here! The constructor needs to take a Player object as parameter and store it in self.player for the methods below to work.
     # HINT: The constructor should create and draw the graphical elements of the player (score and cannon)
     # HINT: The constructor probably needs a few additional parameters e.g. to access the game window.
-    
+    def __init__():
+        pass
     def fire(self, angle, vel):
         # Fire the cannon of the underlying player object
         proj = self.player.fire(angle, vel)
