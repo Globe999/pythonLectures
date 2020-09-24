@@ -19,12 +19,11 @@ class FifteenModel:
 		return self.gameMatrix[row][col]
 
 	def tryMove(self,row,col):
-		
-		if 0 < row-1 and self.gameMatrix[row-1][col] == 0:
+		if 0 <= row-1 and self.gameMatrix[row-1][col] == 0:
 			self.__flipNum(row, col, row-1,col)
 		elif row+1 < 4 and self.gameMatrix[row+1][col] == 0:
 			self.__flipNum(row, col, row+1,col)
-		elif 0 < col-1 and self.gameMatrix[row][col-1] == 0:
+		elif 0 <= col-1 and self.gameMatrix[row][col-1] == 0:
 			self.__flipNum(row, col, row,col-1)
 		elif col+1 < 4 and self.gameMatrix[row][col+1] == 0:
 			self.__flipNum(row, col, row,col+1)
@@ -35,15 +34,14 @@ class FifteenModel:
 		self.gameMatrix[row1][col1] = 0
 	def shuffle(self):
 		#Create list
-		pass
-		# numList = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
-		# self.gameMatrix = []
-		# for _ in range(4):
-		# 	tempList = []
-		# 	for i in range(4):
-		# 		randomNum = random.choice(numList)
-		# 		if not randomNum:
-		# 			randomNum = 0
-		# 		numList.pop(numList.index(randomNum))
-		# 		tempList.append(randomNum)
-		# 	self.gameMatrix.append(tempList)
+		numList = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0]
+		self.gameMatrix = []
+		for _ in range(4):
+			row = []
+			for i in range(4):
+				randomNum = random.choice(numList)
+				if not randomNum:
+					randomNum = 0
+				numList.pop(numList.index(randomNum))
+				row.append(randomNum)
+			self.gameMatrix.append(row)
