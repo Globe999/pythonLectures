@@ -27,7 +27,13 @@ from graphics import *
 class GraphicGame:
     def __init__(self, game):
         self.game = game
+        win = GraphWin("Cannon game", 640, 480, autoflush=False)
+        win.setCoords(-110, -10, 110, 155)
+        self.win = win
+        # self.players = [GraphicPlayer(self.game.players[0], GraphicPlayer(self.game.players[1]))]
 
+    def getWindow(self):
+        return self.win
     def getPlayers(self):
         return self.game.getPlayers()
     def getCannonSize(self):
@@ -49,15 +55,13 @@ class GraphicGame:
     def newRound(self):
         return self.game.newRound()
 
-
-
-
 class GraphicPlayer:
     # TODO: We need a constructor here! The constructor needs to take a Player object as parameter and store it in self.player for the methods below to work.
     # HINT: The constructor should create and draw the graphical elements of the player (score and cannon)
     # HINT: The constructor probably needs a few additional parameters e.g. to access the game window.
-    def __init__():
-        pass
+    def __init__(self, player):
+        self.player = player
+
     def fire(self, angle, vel):
         # Fire the cannon of the underlying player object
         proj = self.player.fire(angle, vel)
@@ -92,7 +96,8 @@ class GraphicProjectile:
     # TODO: This one also needs a constructor, and it should take a Projectile object as parameter and store it in self.proj.
     # Hint: We are also going to need access to the game window
     # Hint: There is no color attribute in the Projectile class, either it needs to be passed to the constructor here or Projectile needs to be modified.
-
+    def __init__(self):
+        pass #TODO
     def update(self, dt):
         # update the projectile
         self.proj.update(dt)
