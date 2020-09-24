@@ -19,17 +19,18 @@ class FifteenModel:
 		return self.gameMatrix[row][col]
 
 	def tryMove(self,row,col):
+		
 		if 0 < row-1 and self.gameMatrix[row-1][col] == 0:
-			self._flipNum(row, col, row-1,col)
+			self.__flipNum(row, col, row-1,col)
 		elif row+1 < 4 and self.gameMatrix[row+1][col] == 0:
-			self._flipNum(row, col, row+1,col)
+			self.__flipNum(row, col, row+1,col)
 		elif 0 < col-1 and self.gameMatrix[row][col-1] == 0:
-			self._flipNum(row, col, row,col-1)
+			self.__flipNum(row, col, row,col-1)
 		elif col+1 < 4 and self.gameMatrix[row][col+1] == 0:
-			self._flipNum(row, col, row,col+1)
+			self.__flipNum(row, col, row,col+1)
 
 	#Row1 = current row, row2 = other row
-	def _flipNum(self, row1, col1, row2, col2):
+	def __flipNum(self, row1, col1, row2, col2):
 		self.gameMatrix[row2][col2] = self.gameMatrix[row1][col1]
 		self.gameMatrix[row1][col1] = 0
 	def shuffle(self):
