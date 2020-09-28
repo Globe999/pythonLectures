@@ -76,7 +76,7 @@ class Game:
         # HINT: random.random() gives a random value between 0 and 1
         # multiplying this by 20 gives a random value between 0 and 20
         # how do you shift a value between 0 and 20 to one between -10 and +10?
-        self.wind = (random.random() * 20) - 10
+        self.setCurrentWind(random.random() * 20) - 10
         pass  # TODO: this should do something instead of nothing
 
 
@@ -130,14 +130,24 @@ class Player:
             return 0
         else:
             # Check if proj distance is longer than box, if it is, return neg value
-            if otherPlayer.getX() < proj.xPos: 
-                print('player mindre än proj, retunerar pos värde')
+            if otherPlayer.getX() < proj.xPos and self.firesRight: 
+                print('player mindre än proj, skjuter från vänster, retunerar pos värde')
                 print('--------')
                 return diff - hitRange
-            else:
-                print('player större än proj, retunerar neg värde')
+            elif otherPlayer.getX() < proj.xPos and not self.firesRight:
+                print('player mindre än proj, skjuter från höger retunerar neg värde')
                 print('--------')
                 return -1 * (diff - hitRange)
+
+            elif otherPlayer.getX() > proj.xPos and self.firesRight:
+                print('player större än proj, skjuter från höger retunerar neg värde')
+                print('--------')
+                return -1 * (diff - hitRange)
+
+            elif otherPlayer.getX() > proj.xPos and not self.firesRight:
+                print('player större än proj, skjuter från höger retunerar neg värde')
+                print('--------')
+                return diff - hitRange
         
     """ The current score of this player """
 
