@@ -27,11 +27,9 @@ from graphics import *
 class GraphicGame:
     def __init__(self, game):
         self.game = game
-        win = GraphWin("Cannon game", 640, 480, autoflush=False)
-        win.setCoords(-110, -10, 110, 155)
-        self.win = win
-        # self.players = [GraphicPlayer(self.game.players[0], GraphicPlayer(self.game.players[1]))]
-
+        self.win = GraphWin("Cannon game", 640, 480, autoflush=False)
+        self.win.setCoords(-110, -10, 110, 155)
+        self.players = [GraphicPlayer(self.game.getCurrentPlayer(), self), GraphicPlayer(self.game.getOtherPlayer(), self)]
     def getWindow(self):
         return self.win
     def getPlayers(self):
@@ -59,17 +57,33 @@ class GraphicPlayer:
     # TODO: We need a constructor here! The constructor needs to take a Player object as parameter and store it in self.player for the methods below to work.
     # HINT: The constructor should create and draw the graphical elements of the player (score and cannon)
     # HINT: The constructor probably needs a few additional parameters e.g. to access the game window.
-    def __init__(self, player):
+    def __init__(self, player, ggame):
         self.player = player
+        self.ggame = ggame
+        self.proj = None
+        x = self.player.getX()
+        cannonSize = self.ggame.getCannonSize()
+        self.gCannon = Rectangle(Point(x - cannonSize/2, cannonSize),Point(x + cannonSize/2, 0))
+        self.gCannon.setFill(self.player.getColor())
+        self.gCannon.draw(self.ggame.win)
+
+        p1 = (x, -5)
+        self.gText = Text(p1, "Score : " + str(self.player.getScore()))
+        #SETTEXT
+        self.gText.draw(self.ggame.getWindow())
 
     def fire(self, angle, vel):
         # Fire the cannon of the underlying player object
         proj = self.player.fire(angle, vel)
-        
+
+        if self.proj is not None:
+            self.proj.undraw()
+            
+        self.proj = GraphicProjectile(proj, self.ggame, self.player.getColor())
         #TODO: We need to undraw the old GraphicProjectile for this player (if there is one).
         
         # TODO: proj is a Projectile, but we should return a GraphicProjectile here! We need to create a GraphicProjectile "wrapping" around proj.
-        return proj
+        return self.proj
     
     def getAim(self):
         return self.player.getAim()
@@ -88,6 +102,7 @@ class GraphicPlayer:
         
     def increaseScore(self):
         self.player.increaseScore()
+        self.gText.draw(self.ggame.getWindow())
         # TODO: This seems like a good place to update the score text.
 
 
@@ -96,11 +111,21 @@ class GraphicProjectile:
     # TODO: This one also needs a constructor, and it should take a Projectile object as parameter and store it in self.proj.
     # Hint: We are also going to need access to the game window
     # Hint: There is no color attribute in the Projectile class, either it needs to be passed to the constructor here or Projectile needs to be modified.
-    def __init__(self):
-        pass #TODO
+    def __init__(self, proj, ggame, color):
+        self.proj = proj
+        self.ggame = ggame
+        self.color = color
+
+        p1 = Point(self.getX, self.getY)
+        c = Circle(p1, self.ggame.getBallSize())
+        c.setFill(color)
+        c.draw(self.ggame.getWindow())
+
     def update(self, dt):
         # update the projectile
         self.proj.update(dt)
+        #.MOVE
+        self.proj.draw(self.ggame.getWindow())
         # TODO: Graphic stuff needs to happen here.
         
     def getX(self):
@@ -111,6 +136,9 @@ class GraphicProjectile:
 
     def isMoving(self):
         return self.proj.isMoving()
+
+    def undraw(self):
+        self.proj.undraw()
 
     # TODO: There needs to be a way of undrawing the projectile.
     # HINT: All graphical components in graphics.py have undraw()-methods    

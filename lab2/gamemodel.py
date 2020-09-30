@@ -1,4 +1,4 @@
-from math import sin, cos, radians
+from math import sin, cos, radians, copysign
 import random
 
 # TODO: Deal with all TODOs in this file and also remove the TODO and HINT comments.
@@ -16,7 +16,7 @@ class Game:
         self.ballSize = ballSize
         self.players = [Player(self, "blue", True, -90, True),
                         Player(self, "red", False, 90, False)]
-        self.wind = 0
+        self.wind = (random.random() * 20 - 10)
 
     """ A list containing both players """
 
@@ -76,8 +76,8 @@ class Game:
         # HINT: random.random() gives a random value between 0 and 1
         # multiplying this by 20 gives a random value between 0 and 20
         # how do you shift a value between 0 and 20 to one between -10 and +10?
-        self.setCurrentWind(random.random() * 20) - 10
-        pass  # TODO: this should do something instead of nothing
+        self.setCurrentWind((random.random() * 20 - 10))
+        # TODO: this should do something instead of nothing
 
 
 """ Models a player """
@@ -115,39 +115,13 @@ class Player:
         # HINT: This method should give a negative value if the projectile missed to the left and positive if it missed to the right.
         # The distance should be how far the projectile and cannon are from touching, not the distance between their centers.
         # You probably need to use getCannonSize and getBallSize from Game to compensate for the size of cannons/cannonballs
-        otherPlayer = self.game.getOtherPlayer()
-        diff = abs(proj.xPos - otherPlayer.getX())
+        diff = abs(proj.xPos - self.getX())
         hitRange = self.game.ballSize + self.game.cannonSize / 2
-
-        print('projX: ' + str(proj.xPos))
-        print('playerX: ' + str(otherPlayer.getX()))
-        print('diff: ' + str(diff))
-        print('hitRange: ' + str(hitRange))
         
         if diff < hitRange:
-            print('Skickar tillbaka 0')
-            print('--------')
             return 0
         else:
-            # Check if proj distance is longer than box, if it is, return neg value
-            if otherPlayer.getX() < proj.xPos and self.firesRight: 
-                print('player mindre än proj, skjuter från vänster, retunerar pos värde')
-                print('--------')
-                return diff - hitRange
-            elif otherPlayer.getX() < proj.xPos and not self.firesRight:
-                print('player mindre än proj, skjuter från höger retunerar neg värde')
-                print('--------')
-                return -1 * (diff - hitRange)
-
-            elif otherPlayer.getX() > proj.xPos and self.firesRight:
-                print('player större än proj, skjuter från höger retunerar neg värde')
-                print('--------')
-                return -1 * (diff - hitRange)
-
-            elif otherPlayer.getX() > proj.xPos and not self.firesRight:
-                print('player större än proj, skjuter från höger retunerar neg värde')
-                print('--------')
-                return diff - hitRange
+            return copysign(diff - hitRange, (proj.xPos - self.getX()))
         
     """ The current score of this player """
 
