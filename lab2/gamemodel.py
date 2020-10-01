@@ -76,7 +76,8 @@ class Game:
         # HINT: random.random() gives a random value between 0 and 1
         # multiplying this by 20 gives a random value between 0 and 20
         # how do you shift a value between 0 and 20 to one between -10 and +10?
-        self.setCurrentWind((random.random() * 20 - 10))
+        # self.setCurrentWind((random.random() * 20 - 10))
+        self.wind = (random.random() * 20 - 10)
         # TODO: this should do something instead of nothing
 
 
@@ -104,8 +105,8 @@ class Player:
         self.aim = angle
         self.velocity = velocity
         if not self.firesRight:
-            self.aim = 180 - angle
-        return Projectile(self.aim, self.velocity, self.game.getCurrentWind(), self.position, self.game.cannonSize / 2, -110, 110)
+            angle = 180 - angle
+        return Projectile(angle, self.velocity, self.game.getCurrentWind(), self.position, self.game.cannonSize / 2, -110, 110)
 
         """ Gives the x-distance from this players cannon to a projectile. If the cannon and the projectile touch (assuming the projectile is on the ground and factoring in both cannon and projectile size) this method should return 0"""
 

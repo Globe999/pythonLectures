@@ -29,25 +29,35 @@ class GraphicGame:
         self.game = game
         self.win = GraphWin("Cannon game", 640, 480, autoflush=False)
         self.win.setCoords(-110, -10, 110, 155)
-        self.players = [GraphicPlayer(self.game.getCurrentPlayer(), self), GraphicPlayer(self.game.getOtherPlayer(), self)]
+        self.players = [GraphicPlayer(self.game.players[0], self), GraphicPlayer(self.game.players[1], self)]
     def getWindow(self):
         return self.win
+
     def getPlayers(self):
-        return self.game.getPlayers()
+        return self.players
+
     def getCannonSize(self):
         return self.game.getCannonSize()
     def getBallSize(self):
         return self.game.getBallSize()
+
     def getCurrentPlayer(self):
-        return self.game.getCurrentPlayer()
+        if self.game.players[0].isActive:
+            return self.players[0]
+        else:
+            return self.players[1]
+        
     def getOtherPlayer(self):
-        return self.game.getOtherPlayer()
+        if self.game.players[0].isActive:
+            return self.players[1]
+        else:
+            return self.players[0]
     def getCurrentPlayerNumber(self):
         return self.game.getCurrentPlayerNumber()
     def nextPlayer(self):
         return self.game.nextPlayer()
-    def setCurrentWind(self):
-        return self.game.setCurrentWind()
+    def setCurrentWind(self, wind):
+        return self.game.setCurrentWind(wind)
     def getCurrentWind(self):
         return self.game.getCurrentWind()
     def newRound(self):
@@ -61,18 +71,19 @@ class GraphicPlayer:
         self.player = player
         self.ggame = ggame
         self.proj = None
+
         x = self.player.getX()
         cannonSize = self.ggame.getCannonSize()
-        self.gCannon = Rectangle(Point(x - cannonSize/2, cannonSize),Point(x + cannonSize/2, 0))
+        self.gCannon = Rectangle(Point(x - cannonSize/2, cannonSize),(Point(x + cannonSize/2, 0)))
         self.gCannon.setFill(self.player.getColor())
-        self.gCannon.draw(self.ggame.win)
+        self.gCannon.draw(self.ggame.getWindow())
 
-        p1 = (x, -5)
-        self.gText = Text(p1, "Score : " + str(self.player.getScore()))
-        #SETTEXT
+        p1 = Point(x, -5)
+        self.gText = Text(p1, "Score: %s" % self.player.getScore())
+        
         self.gText.draw(self.ggame.getWindow())
 
-    def fire(self, angle, vel):
+    def fire(self, angle, vel): 
         # Fire the cannon of the underlying player object
         proj = self.player.fire(angle, vel)
 
@@ -96,13 +107,10 @@ class GraphicPlayer:
 
     def getScore(self):
         return self.player.getScore()
-
-    def projectileDistance(self, proj):
-        return self.player.projectileDistance(proj)
         
     def increaseScore(self):
         self.player.increaseScore()
-        self.gText.draw(self.ggame.getWindow())
+        self.gText.setText("Score %s" % self.player.getScore())
         # TODO: This seems like a good place to update the score text.
 
 
@@ -116,17 +124,18 @@ class GraphicProjectile:
         self.ggame = ggame
         self.color = color
 
-        p1 = Point(self.getX, self.getY)
-        c = Circle(p1, self.ggame.getBallSize())
-        c.setFill(color)
-        c.draw(self.ggame.getWindow())
+        p1 = Point(self.proj.getX(), self.proj.getY())
+        self.ball = Circle(p1, self.ggame.getBallSize())
+        self.ball.setFill(color)
+        self.ball.draw(self.ggame.getWindow())
+        update()
 
     def update(self, dt):
         # update the projectile
+        oldX = self.proj.getX()
+        oldY = self.proj.getY()
         self.proj.update(dt)
-        #.MOVE
-        self.proj.draw(self.ggame.getWindow())
-        # TODO: Graphic stuff needs to happen here.
+        self.ball.move(self.proj.getX() - oldX, self.proj.getY() - oldY)
         
     def getX(self):
         return self.proj.getX()
@@ -138,7 +147,7 @@ class GraphicProjectile:
         return self.proj.isMoving()
 
     def undraw(self):
-        self.proj.undraw()
+        self.ball.undraw()
 
     # TODO: There needs to be a way of undrawing the projectile.
     # HINT: All graphical components in graphics.py have undraw()-methods    
