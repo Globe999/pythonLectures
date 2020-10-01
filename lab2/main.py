@@ -1,4 +1,3 @@
-# Imports everything from both model and graphics
 from gamemodel import *
 from gamegraphics import *
 import sys
@@ -6,6 +5,7 @@ import sys
 # Here is a nice little method you get for free
 # It fires a shot for the current player and animates it until it stops
 def graphicFire(game, angle, vel):
+    """Fires a shot and animates it, returns a graphical projectile"""
     #This is a gplayer
     player = game.getCurrentPlayer()
     # create a shot and track until it hits ground or leaves window
@@ -16,7 +16,7 @@ def graphicFire(game, angle, vel):
     return gproj
 
 def graphicPlay():
-    # TODO: This is where you implement the game loop
+    """Game loop, handles input from player"""
     game = GraphicGame(Game(10, 4))
     game.newRound()
 
@@ -37,23 +37,19 @@ def graphicPlay():
 
 
 def finishShot(game, proj):
+    """Cleans up the shot, check if it hit, awards points"""
     # The current player
     player = game.getCurrentPlayer()
     # The player opposing the current player
     other = game.getOtherPlayer()
 
     # Check if we won
-    distance = other.projectileDistance(proj.proj) 
+    distance = other.projectileDistance(proj) 
     if distance == 0.0:
         player.increaseScore()
         game.newRound()
     # Switch active player
     game.nextPlayer()
     
-    # HINT: Creating a GraphicGame is a good start. 
-    # HINT: You can look at the text interface for some inspiration
-    # Note that this code should not directly work with any drawing or such, all that is done by the methods in the classes
-
-
 # Run the game with graphical interface
 graphicPlay()
