@@ -1,10 +1,9 @@
 def transpose(matrix):
-    tranposed = []
-    colIndex = 0
-    rowIndex = 0
     if not matrix:
         return []
 
+    tranposed = []
+    rowIndex = 0
     for colIndex in range(len(matrix[0])):
         newrow = []
         for row in matrix:
@@ -66,8 +65,9 @@ def loadtxt(file):
 
     for l in txtLines:
         strList = l.rstrip("\n").split("\t")
-        
+        #Remove empty elements
         strList[:] = [x for x in strList if x]
+        #Convert str list to float list
         floatList = list(map(float, strList))
         matrix.append(floatList)
     return matrix
