@@ -63,8 +63,11 @@ def loadtxt(file):
     matrix = []
     if not txtLines:
         return []
+
     for l in txtLines:
         strList = l.rstrip("\n").split("\t")
+        
+        strList[:] = [x for x in strList if x]
         floatList = list(map(float, strList))
         matrix.append(floatList)
     return matrix
