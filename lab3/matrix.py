@@ -67,3 +67,4 @@ def loadtxt(file):
         strList = l.rstrip("\n").split("\t")
         floatList = list(map(float, strList))
         matrix.append(floatList)
+    return matrix
