@@ -20,7 +20,7 @@ def binarySearch(values, i, j, key):
 		return binarySearch(values.copy(), k+1, j, key)
 
 def totalFileSize(path):
-
+  pass
 
 
 
@@ -28,4 +28,6 @@ val = []
 for i in list(reversed(range(1000))):
     val.append(i)
 
-print(binarySearch(val, 0, len(val)-1, 2))
+# print(binarySearch(val, 0, len(val)-1, 2))
+
+print(gcd(73,3))
